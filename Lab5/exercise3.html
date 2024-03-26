@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<style>
+    .columns{
+        border: 2px solid darkgrey;
+        border-radius: 5px;
+        padding-top: 15px;
+    }
+
+    .alert{
+        max-width: 500px;
+        margin: auto;
+    }
+</style>
+
+<script>
+    function isEmail(email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    }
+
+    function checkInfo() {
+        if (!$('#name').val() && !$('#email').val() && !$('#phone').val())
+        {
+            $('#errorAlert').html("An unknown eror occured. Please try again!");
+            postNotification();
+            return flase;
+        }
+        else if(!$('#name').val())
+        {
+            $('#errorAlert').html("A <b>Name</b> unknown occurred. Please try again!");
+            postNotification();
+            return flase;
+        }
+        else if (!$('#email').val() || !isEmail($('#email').val()))
+        {
+            $('#errorAlert').html("An <b>Email</b> unknown occurred. Please try again!");
+            postNotification();
+            return flase;
+        }
+        else if (!$('#phone').val())
+        {
+            $('#errorAlert').html("A <b>Phone</b> unknown occurred. Please try again!");
+            postNotification();
+            return flase;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    $(document).ready(function ()  {
+        // đọc dữ liệu ngay khi tải trang xong
+        $.get("/Lab5/api/get-students.php", function(data, status){
+            data.data.forEach(element => {
+                let row = $('<tr>');
+                row.append('<td class="id">'+element.id+'</td>');
+                row.append('<td class="name">'+element.name+'</td>');
+                row.append('<td class="email">'+element.email+'</td>');
+                row.append('<td class="phone">'+element.phone+'</td>');
+                row.append('<td><a href="#" onclick="transferEdit(this)">Edit</a>  |  <a href="#" onclick="confirmRemoval(this)">Delete</a></td>');
+                $("#myTable").find('#table-body').append(row);
+            });
+        },"json");
+
+        $('#btnAdd').click(function () {
+            $('#main').attr('action', '/Lab5/api/add-student.php');
+            if (checkInfo())
+            {
+                $('#main').submit();
+            }
+        })
+        
+        $('#btnUpd').click(function () {
+            $('#main').attr('action', '/Lab5/api/update-student.php');
+            if (checkInfo())
+            {
+                $('#main').submit();
+            }
+        })
+
+        $('#delete-button').click(function () {
+            $('#delForm').submit();            
+        })
+    });
+
+    function postNotification() {
+        $('#alert2').show().animate({opacity: 1},500).delay(4000).animate({opacity: 0},500);    
+    }
+
+    // hiện dialog xác nhận khi xóa
+    function confirmRemoval(a) {
+        $("#producer-name").html($(a).closest("tr").find(".name").text());
+        $("#delID").val($(a).closest("tr").find(".id").text());
+        $('#confirm-removal-modal').modal({show: true});
+    }
+
+    //  chuyển thông tin sang form
+    function transferEdit(a) {
+        $("#updID").val($(a).closest("tr").find(".id").text());
+        $("#name").val($(a).closest("tr").find(".name").text());
+        $("#email").val($(a).closest("tr").find(".email").text());
+        $("#phone").val($(a).closest("tr").find(".phone").text());
+        $("#btnAdd").addClass('disabled');
+        $("btnAdd").attr("disabled", true);
+        $("#btnUpd").removeClass('disabled');
+        $("#btnUpd").attr("disabled", false);
+    }
+
+</script>
+
+<div class="container">
+    <h1>jQuery</h1>
+    <p>Khi trang web vừa được tải, cần gửi một request đến server, nhận về danh sách sinh viên đang có & hiện lên bảng.</p>
+    <p>Nhấn <b>Add</b> để thêm một sinh viên vào danh sách: trước hết thông tin sẽ gửi lên server và lưu vào database, server sẽ trả về kết quả. Nếu kết quả là <b>true</b> thì đưa thông tin sinh viên vừa thêm vào bảng. Nếu lỗi hoặc thành công thì hiện thông báo tương ứng như phía dưới rồi tự ẩn đi sau 5 giây.</p>
+    <p>Khi nhấn <b>Edit</b> thông tin sẽ được chuyển qua form để sửa, lúc này disable nút <b>Add</b> và enable nút <b>Update</b>, quá trình update cũng tương tự như thêm, gửi thông tin lên server, nhận kết quả rồi cập nhật bảng/hiển thị thông báo tương ứng.</p>
+    <p>Khi nhấn <b>Delete</b> thì hiện dialog xác nhận trước rồi gửi lệnh xóa lên server, lúc nhận kết quả về làm tương tự các bước trước.</p>
+    <div class="row">
+        <div class="col-sm-6 col-md-5 columns">
+            <form id="main" class="form-horizontal" method="get">
+                
+                <input type="text" id="updID" name="id" hidden>
+                
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="name">Name:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="email">Email:</label>
+                    <div class="col-sm-6">
+                        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="phone">Phone:</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="phone" placeholder="Enter phone" name="phone">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-default add-student" id="btnAdd">Add</button>
+                        <button type="button" class="btn btn-success disabled" id="btnUpd" disabled>Update</button>
+                    </div>
+                </div>
+            </form>
+        </div> <!-- Col 1 -->
+        <div class="col-sm-6 col-md-7 columns">
+
+            <table class="table table-hover" id="myTable">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+            </table>
+
+
+        </div> <!-- col 2-->
+    </div>
+
+
+    <br><br>
+    <div class="alert alert-success alert-dismissable fade in" id="alert1" style="opacity: 0">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!</strong> Delete student success.
+    </div>
+    <br>
+    <div class="alert alert-danger alert-dismissable fade in" id="alert2" style="opacity: 0">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Failed!</strong> <span id="errorAlert"></span>
+    </div>
+
+</div>
+
+
+<!-- Confirm Removal Modal -->
+<div class="modal fade" id="confirm-removal-modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Xóa sinh viên</h4>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa sinh viên <strong id="producer-name"></strong>?</p>
+                <form id="delForm" action="/Lab5/api/delete-student.php" method="get">
+                    <input type="text" id="delID" name="id" hidden>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="delete-button" class="btn btn-danger" data-dismiss="modal">Xóa</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
+            </div>
+        </div>
+
+    </div>
+</div><!-- Confirm Removel modal -->
+
+
+</body>
+</html>

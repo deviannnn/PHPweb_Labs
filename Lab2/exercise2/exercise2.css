@@ -1,0 +1,33 @@
+#banner {
+    background-color: blue;
+    display: flex;
+    justify-content: space-around;
+}
+h2 {
+    margin: 0px;
+    text-align: center;
+    color: darkolivegreen;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+table {
+    width: 100%;
+    color: cornflowerblue;
+    border-collapse: collapse;
+}
+#tr1 {
+    background-color: cornflowerblue;
+    text-transform: uppercase;
+    color: white;
+    text-align: center;
+}
+#tr2 {
+    background-color: lightskyblue;
+    text-transform: capitalize;
+    color: orange;
+    text-align: center;
+}
+.td {
+    color: red;
+    text-align: center;
+}

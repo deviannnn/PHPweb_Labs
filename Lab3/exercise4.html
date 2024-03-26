@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Table</title>
+</head>
+<body>
+
+<style>
+    *{
+        box-sizing: border-box;
+    }
+
+    select{
+        float: left;
+    }
+    img{
+        float: left;
+    }
+</style>
+
+
+<select id="imageList" name="imageList" size="10">
+    <option value="pic_001.jpg">pic_001.jpg</option>
+    <option value="pic_002.jpg">pic_002.jpg</option>
+    <option value="pic_003.jpg">pic_003.jpg</option>
+    <option value="pic_004.jpg">pic_004.jpg</option>
+    <option value="pic_005.jpg">pic_005.jpg</option>
+    <option value="pic_006.jpg">pic_006.jpg</option>
+    <option value="pic_007.jpg">pic_007.jpg</option>
+    <option value="pic_008.jpg">pic_008.jpg</option>
+    <option value="pic_009.jpg">pic_009.jpg</option>
+    <option value="pic_010.jpg">pic_010.jpg</option>
+</select>
+<img id="imgShow" src="images/pic_001.jpg">
+<button type="button" id="backBtn">Back</button>
+<button type="button" id="startSlideBtn">Start slideshow</button>
+<button  type="button" id="nextBtn">Next</button>
+<p id="detailText">pic_001.jpg (10/55)</p>
+</body>
+
+<script>
+    var num = 1;
+    document.getElementById("nextBtn").addEventListener("click", () => {
+        num++;
+        let detail = "";
+        if (num<10){
+            detail = "pic_00"+num+".jpg";
+            document.getElementById("imgShow").setAttribute("src", "images/"+detail);
+        }
+        else if (num==10){
+            detail = "pic_0"+num+".jpg";
+            document.getElementById("imgShow").setAttribute("src", "images/"+detail);
+        }
+        else
+        {
+            num=1;
+            detail = "pic_00"+num+".jpg";
+            document.getElementById("imgShow").setAttribute("src", "images/"+detail);
+        }
+        document.getElementById("detailText").textContent = detail;
+    })
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+        num--;
+        let detail = "";
+        if (num>0)
+        {
+            detail = "pic_00"+num+".jpg";
+            document.getElementById("imgShow").setAttribute("src", "images/"+detail);
+        }
+        else
+        {
+            num=10
+            detail = "pic_0"+num+".jpg";
+            document.getElementById("imgShow").setAttribute("src", "images/"+detail);
+        }
+        document.getElementById("detailText").textContent = detail;
+    })
+
+    let flag = true;
+    document.getElementById("startSlideBtn").addEventListener("click", () => {
+        if (flag)
+        {
+            document.getElementById("startSlideBtn").textContent = "Stop slideshow";
+            slideShow = setInterval(() => {
+                num++;
+                let detail = "";
+                if (num<10){
+                    detail = "pic_00"+num+".jpg";
+                    document.getElementById("imgShow").setAttribute("src", "images/"+detail);
+                }
+                else if (num==10){
+                    detail = "pic_0"+num+".jpg";
+                    document.getElementById("imgShow").setAttribute("src", "images/"+detail);
+                }
+                else
+                {
+                    num=1;
+                    detail = "pic_00"+num+".jpg";
+                    document.getElementById("imgShow").setAttribute("src", "images/"+detail);
+                }
+                document.getElementById("detailText").textContent = detail;
+            },1000)
+            document.getElementById("nextBtn").disabled = true;
+            document.getElementById("backBtn").disabled = true;
+            flag = false;
+        }
+        else{
+            document.getElementById("startSlideBtn").textContent = "Start slideshow";
+            clearInterval(slideShow);
+            document.getElementById("nextBtn").disabled = false;
+            document.getElementById("backBtn").disabled = false;
+            flag = true;
+        }
+    })
+</script>
+</html>

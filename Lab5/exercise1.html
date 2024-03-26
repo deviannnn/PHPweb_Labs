@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Ex1</title>
+</head>
+<style>
+    .box-container {
+        width: 302px;
+        height: 300px;
+        border: 1px solid;
+        display: flex;
+        flex-wrap: wrap;
+        align-self: center;
+    }
+    .hideme {
+        background-color: lightgreen;
+        color: green;
+        display: flex;
+        width: fit-content; 
+        margin-top: 10px;
+        padding: 15px;
+        opacity: 0;
+    }
+    .xbutton {
+        background-color: transparent;
+        color: black;
+        border-style: none;
+        margin-left: 30px;
+    }
+</style>
+<body>
+    <div class="container" style="text-align: -webkit-center;">
+        <div class="box-container">
+
+        </div>
+        <div class="hideme" id="post-draft1">
+            Background color has changed color
+            <button class="xbutton">
+                X
+            </button>
+        </div>
+</body>
+<script>
+    $(document).ready(function() {
+        var bg =  $("body").css("background-color");
+        for (let i = 0; i < 100; i++) {
+            let box = $("<div>");
+            box.css("width","30px");
+            box.css("height","30px");
+            box.css("border","1px solid");
+            box.css("background-color", getRandomColor());
+            $(".box-container").append(box);
+
+            $(box).click(function() {
+                $("body").css("background-color",$(this).css("background-color"));
+                postNotification();
+                bg =  $("body").css("background-color");
+            });
+            $(box).hover(
+                function() {
+                    $("body").css("background-color",$(this).css("background-color"));
+                }
+                ,
+                function() {
+                    $("body").css("background-color", bg);
+                }
+            );
+        }
+    })
+
+    function getColor() {
+        return $("body").css("background-color");
+    }
+    function postNotification() {
+        $("#post-draft1").show().animate({opacity: 1},500).delay(1500).animate({opacity: 0},500);    
+    }
+    $(".xbutton").click( () => {
+        $("#post-draft1").stop(false, true);
+    })
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+</script>
+</html>

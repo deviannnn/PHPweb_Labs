@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<style>
+    form{
+        max-width: 400px;
+        margin: auto;
+    }
+    #errorMes{
+        color: red;
+    }
+</style>
+
+<div class="container">
+
+    <form action="/action_page.php">
+        <h2>Login</h2>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+        </div>
+        <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd">
+        </div>
+        <span id="errorMes"></span>
+        <button id="submitBtn" type="submit" class="btn btn-default">Submit</button>
+    </form>
+</div>
+</body>
+
+<script>
+    document.getElementById("email").onclick = function() {myFunction()};
+    document.getElementById("pwd").onclick = function() {myFunction()};
+    function myFunction() {
+        document.getElementById("errorMes").innerHTML = "";
+    }
+    const validateEmail = (email) => {
+        return String(email)
+            .toLowerCase()
+            .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
+    document.getElementById("submitBtn").addEventListener("click", (e) => {
+        if (!document.getElementById("email").value){
+            document.getElementById("email").focus();
+            document.getElementById("errorMes").innerHTML = "Please enter your email<br>";
+            e.preventDefault();
+        }
+        else if (!document.getElementById("pwd").value){
+            document.getElementById("pwd").focus();
+            document.getElementById("errorMes").innerHTML = "Please enter your password<br>";
+            e.preventDefault();
+        }
+        else if (!validateEmail(document.getElementById("email").value)){
+            document.getElementById("email").focus();
+            document.getElementById("errorMes").innerHTML = "Your email is not correct<br>";
+            e.preventDefault();
+        }
+        else if (document.getElementById("pwd").value.length < 6){
+            document.getElementById("pwd").focus();
+            document.getElementById("errorMes").innerHTML = "Your password must contain at least 6 characters<br>";
+            e.preventDefault();
+        }        
+    })
+</script>
+</html>

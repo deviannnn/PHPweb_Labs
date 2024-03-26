@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<style>
+    .container{
+        max-width: 600px;
+        margin: auto;
+    }
+
+    checkbox{
+        margin-right: 10px;
+    }
+</style>
+
+
+<div class="container">
+    <br>
+    <br>
+    <p id="spaceMes">Message will be here</p><br><br>
+
+    <div class="form-group">
+        <label for="message">Message:</label>
+        <input type="text" class="form-control" id="message" placeholder="Enter new message" name="message">
+    </div>
+    <div class="form-group">
+        <label for="color">Color:</label>
+        <select name="color" id="color">
+            <option value="black">Black</option>
+            <option value="red">Red</option>
+            <option value="green">Green</option>
+            <option value="blue">Blue</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="bold">Bold:</label>
+        <input type="checkbox" name="bold" id="bold">
+        <label for="italic">Italic:</label>
+        <input type="checkbox" name="italic" id="italic">
+        <label for="underline">Underline:</label>
+        <input type="checkbox" name="underline" id="underline">
+    </div>
+    <button id="showMesBtn" type="button">Show message</button>
+
+</div>
+</body>
+
+<script>
+    document.getElementById("showMesBtn").addEventListener("click", () => {
+        strMes = document.getElementById("message").value;
+        //coloring text
+        if (document.getElementById("color").value == "red")
+        {
+            document.getElementById("spaceMes").style.color = "red";
+        }
+        if (document.getElementById("color").value == "green")
+        {
+            document.getElementById("spaceMes").style.color = "green";
+        }
+        if (document.getElementById("color").value == "blue")
+        {
+            document.getElementById("spaceMes").style.color = "blue";
+        }
+        //formating text
+        if (document.getElementById("bold").checked)
+        {
+            strMes = "<b>" + strMes + "</b>"
+        }
+        if (document.getElementById("italic").checked)
+        {
+            strMes = "<i>" + strMes + "</i>"
+        }
+        if (document.getElementById("underline").checked)
+        {
+            strMes = "<u>" + strMes + "</u>"
+        }
+        document.getElementById("spaceMes").innerHTML = strMes;
+        alert("Xin chào các bạn");
+    })
+</script>
+</html>
